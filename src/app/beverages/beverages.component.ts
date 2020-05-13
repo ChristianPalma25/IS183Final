@@ -16,20 +16,25 @@ export class BeveragesComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.beverages = [];
     await this.getBeverages();
   }
 
   async getBeverages() {
-    const resp = await this.beverageService.getBeverages();
-    this.beverages = resp;
+    this.beverages = await this.beverageService.getBeverages();
   }
 
   goToCreate() {
     this.router.navigate(['beverage-create']);
   }
 
-  deleteBeverage(id: string) {
-
+  async deleteBeverage(id: string) {
+    const resp = await this.beverageService.deleteBeverage(id);
+    if (resp) {
+      this.beverages = this.beverages.filter((beverage) => {
+        return beverage['id'] !== id;
+      });
+    }
   }
 
 }
